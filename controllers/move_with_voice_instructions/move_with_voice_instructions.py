@@ -3,6 +3,11 @@
 # You may need to import some classes of the controller module. Ex:
 #  from controller import Robot, Motor, DistanceSensor
 from controller import Robot
+import speech_recognition as sr
+
+
+r = sr.Recognizer()
+mic = sr.Microphone(device_index=0)
 
 # create the Robot instance.
 robot = Robot()
@@ -16,17 +21,42 @@ timestep = int(robot.getBasicTimeStep())
 #  ds = robot.getDistanceSensor('dsname')
 #  ds.enable(timestep)
 
-# Main loop:
-# - perform simulation steps until Webots is stopping the controller
-while robot.step(timestep) != -1:
-    # Read the sensors:
-    # Enter here functions to read sensor data, like:
-    #  val = ds.getValue()
 
-    # Process sensor data here.
 
-    # Enter here functions to send actuator commands, like:
-    #  motor.setPosition(10.0)
-    pass
+if __name__=="__main__":
 
-# Enter here exit cleanup code.
+    # Main loop:
+    # - perform simulation steps until Webots is stopping the controller
+    while robot.step(timestep) != -1:
+        # Read the sensors:
+        # Enter here functions to read sensor data, like:
+        #  val = ds.getValue()
+
+        # Process sensor data here.
+
+        # Enter here functions to send actuator commands, like:
+
+        respond = ""
+
+        with mic as source:
+            r.adjust_for_ambient_noise(source)
+            audio = r.listen(source)
+
+        try:
+            respond = r.recognize_google(audio)
+        except:
+            respond = ""
+
+        if "left" in respond:
+            print("Turning Left")
+        elif "right" in respond:
+            print("Turning Right")
+        elif "ahead" in respond:
+            print("go ahead")
+        elif "forward" in respond:
+            print("go ahead")
+
+        #  motor.setPosition(10.0)
+        pass
+
+    # Enter here exit cleanup code.
