@@ -4,26 +4,70 @@
 #  from controller import Robot, Motor, DistanceSensor
 from controller import Robot
 import speech_recognition as sr
+import threading
+import time
 
 
 r = sr.Recognizer()
 mic = sr.Microphone(device_index=0)
+
+CommandSet=[]
 
 # create the Robot instance.
 robot = Robot()
 
 # get the time step of the current world.
 timestep = int(robot.getBasicTimeStep())
+MaxSpeed=6.28
 
-# You should insert a getDevice-like function in order to get the
-# instance of a device of the robot. Something like:
-#  motor = robot.getMotor('motorname')
-#  ds = robot.getDistanceSensor('dsname')
-#  ds.enable(timestep)
+lmotor=robot.getMotor('left wheel motor')
+rmotor=robot.getMotor('right wheel motor')
+
+lmotor.setPosition(0)
+rmotor.setPosition(0)
+
+lp=0
+rp=0
 
 
+class VoiceRecognitionThread(threading.Thread):
+    def __init__(self,r,mic):
+        threading.Thread.__init__(self)
+        self.r=r
+        self.mic=mic
+
+    def run(self):
+        while(True):
+            respond = ""
+
+            with self.mic as source:
+                self.r.adjust_for_ambient_noise(source,duration=3)
+                audio = self.r.listen(source)
+            try:
+                respond=r.recognize_google(audio)
+            except:
+                pass
+
+            print(respond)
+
+            if "left" in respond:
+                CommandSet.append("TurnLeft")
+            elif "right" in respond:
+                CommandSet.append("TurnRight")
+            elif "ahead" in respond:
+                CommandSet.append("GoAhead")
+            elif "forward" in respond:
+                CommandSet.append("GoAhead")
+
+        
 
 if __name__=="__main__":
+
+    print("Starting thread!")
+
+    voice_thread=VoiceRecognitionThread(r,mic)
+    voice_thread.start()
+    print("Start!")
 
     # Main loop:
     # - perform simulation steps until Webots is stopping the controller
@@ -36,25 +80,21 @@ if __name__=="__main__":
 
         # Enter here functions to send actuator commands, like:
 
-        respond = ""
-
-        with mic as source:
-            r.adjust_for_ambient_noise(source)
-            audio = r.listen(source)
-
-        try:
-            respond = r.recognize_google(audio)
-        except:
-            respond = ""
-
-        if "left" in respond:
-            print("Turning Left")
-        elif "right" in respond:
-            print("Turning Right")
-        elif "ahead" in respond:
-            print("go ahead")
-        elif "forward" in respond:
-            print("go ahead")
+        if(len(CommandSet)!=0):
+            command=CommandSet.pop(0)
+            print(command)
+            if(command=="TurnLeft"):
+                lp-=10
+                rp+=10
+            elif(command=="TurnRight"):
+                lp+=10
+                rp-=10
+            elif(command=="GoAhead"):
+                lp+=40
+                rp+=40
+        
+        lmotor.setPosition(lp)
+        rmotor.setPosition(rp)
 
         #  motor.setPosition(10.0)
         pass

@@ -3,7 +3,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.9978239528558213 -0.05767152824612826 -0.03195862852094752 1.180337353111502
-  position 0.8608326122926002 9.308585849414333 3.7926565835733173
+  position 0.8754111883803637 8.907485344344694 3.6271367715498064
 }
 TexturedBackground {
 }
@@ -38,13 +38,22 @@ WoodenBox {
   mass 1
 }
 WoodenBox {
+  translation -1.18 0.11 -0.14
+  rotation 0 1 0 1.5708
+  name "wooden box(2)"
+  size 0.2 0.2 0.6
+  mass 1
+}
+WoodenBox {
   translation -0.78 0.11 -0.05
   name "wooden box(6)"
   size 0.2 0.2 1.4
   mass 1
 }
 E-puck {
-  translation 1.19 0 1.25
+  translation -1.17 0 0.34
+  rotation 0 1 0 3.14159
+  controller "move_with_voice_instructions"
 }
 BeerBottle {
   translation 0.41 0 1.24
