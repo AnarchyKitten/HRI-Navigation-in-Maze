@@ -41,7 +41,7 @@ class VoiceRecognitionThread(threading.Thread):
             respond = ""
 
             with self.mic as source:
-                self.r.adjust_for_ambient_noise(source,duration=3)
+                self.r.adjust_for_ambient_noise(source)
                 audio = self.r.listen(source)
             try:
                 respond=r.recognize_google(audio)
@@ -50,14 +50,13 @@ class VoiceRecognitionThread(threading.Thread):
 
             print(respond)
 
-            if "left" in respond:
-                CommandSet.append("TurnLeft")
-            elif "right" in respond:
-                CommandSet.append("TurnRight")
-            elif "ahead" in respond:
-                CommandSet.append("GoAhead")
-            elif "forward" in respond:
-                CommandSet.append("GoAhead")
+            for i in respond.split(' '):
+                if (i=="ahead")|(i=="forward"):
+                    CommandSet.append("GoAhead")
+                elif(i=="left"):
+                    CommandSet.append("TurnLeft")
+                elif(i=="right"):
+                    CommandSet.append("TurnRight")
 
         
 
@@ -84,12 +83,15 @@ if __name__=="__main__":
             command=CommandSet.pop(0)
             print(command)
             if(command=="TurnLeft"):
+                print("Turning Left")
                 lp-=10
                 rp+=10
             elif(command=="TurnRight"):
+                print("Turning Right")
                 lp+=10
                 rp-=10
             elif(command=="GoAhead"):
+                print("Go Ahead")
                 lp+=40
                 rp+=40
         
