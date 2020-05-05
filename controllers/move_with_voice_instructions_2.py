@@ -56,6 +56,16 @@ if __name__ == "__main__":
             elif(i == "right"):
                 CommandSet.append("TurnRight")
 
+    CommandSet.append("TurnLeft")
+    CommandSet.append("TurnLeft")
+    CommandSet.append("GoAhead")
+    CommandSet.append("TurnLeft")
+    CommandSet.append("GoAhead")
+    CommandSet.append("TurnRight")
+    CommandSet.append("GoAhead")
+    CommandSet.append("TurnLeft")
+    CommandSet.append("GoAhead")
+
     # Main loop:
     # - perform simulation steps until Webots is stopping the controller
     t = 0
