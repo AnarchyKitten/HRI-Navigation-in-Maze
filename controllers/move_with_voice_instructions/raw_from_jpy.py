@@ -37,9 +37,6 @@ RealMap=[[[1,0,0,1],[1,1,0,0],[1,0,0,1],[1,1,0,0]],
          [[0,1,0,1],[0,0,0,1],[1,1,0,0],[0,1,0,1]],
          [[0,0,1,1],[0,1,1,0],[0,0,1,1],[0,1,1,0]]]
 
-         KnownMap=[[False for i in range(4)] for j in range(4)]
-
-
 KnownMap=[[False for i in range(4)] for j in range(4)]
 
 Qtable=[[0 for i in range(4)] for j in range(16)]
